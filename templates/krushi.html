@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krushi - Smart Agriculture</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial;
+    background:#0b1020;
+    color:white;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+}
+
+header{
+    padding:20px;
+    background:#111a30;
+    display:flex;
+    justify-content:space-between;
+}
+
+h1 span{color:#00d4ff}
+
+.hero{
+    height:80vh;
+    background:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef') center/cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:50px;
+}
+
+.section{
+    padding:60px 0;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.card{
+    background:#111a30;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.card p{
+    padding:10px;
+}
+
+.video iframe{
+    width:100%;
+    height:400px;
+}
+
+.buttons{
+    text-align:center;
+    margin-top:30px;
+}
+
+button{
+    padding:15px 25px;
+    margin:10px;
+    border:none;
+    background:#00d4ff;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00aacc;
+}
+
+@media(max-width:800px){
+.cards{grid-template-columns:1fr}
+.hero h2{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Krushi <span>Smart Farming</span></h1>
+    <a href="index.html" style="color:white">Home</a>
+</header>
+
+<div class="hero">
+    <h2>Modern Agriculture with AI</h2>
+</div>
+
+<div class="container">
+
+<section class="section">
+    <h2>About Crops</h2>
+    <p>Learn about different crops, their growth stages, and farming techniques used in Odisha.</p>
+</section>
+
+<section class="section">
+    <h2>Crop Gallery</h2>
+    <div class="cards">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1598514982846-4c0a33e32e3b">
+            <p>Rice Crop</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6">
+            <p>Wheat Crop</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443">
+            <p>Vegetables</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Farmers</h2>
+    <div class="cards">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30">
+            <p>Farmer working in field</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399">
+            <p>Harvesting crops</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1472145246862-b24cf25c4a36">
+            <p>Village agriculture</p>
+        </div>
+    </div>
+</section>
+
+<section class="section video">
+    <h2>Crop Growth Video</h2>
+    <iframe src="https://www.youtube.com/embed/3vG2pY8Yy7M" allowfullscreen></iframe>
+</section>
+
+<section class="section">
+    <h2>AI Features</h2>
+    <p>This project includes a crop medicine prediction model and an AI chatbot for farmers.</p>
+
+    <div class="buttons">
+        <button onclick="location.href='predict.html'">Predict Medicine</button>
+        <button onclick="location.href='chatbot.html'">Open Chatbot</button>
+    </div>
+</section>
+
+</div>
+
+</body>
+</html>

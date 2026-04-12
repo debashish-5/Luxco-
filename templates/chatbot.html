@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0b1020 0%, #1a2236 100%);
+            color: #f5f7fb;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+        .chatbot-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 32px 0 18px 0;
+            justify-content: center;
+        }
+        .chatbot-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.03em;
+        }
+        .chatbot-header .world {
+            font-size: 2.5rem;
+            color: #00d4ff;
+        }
+        .chatbot-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.07);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 32px 24px 24px 24px;
+        }
+        #chat-box {
+            height: 340px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.12);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+        .user-msg {
+            text-align: right;
+            background: linear-gradient(90deg,#00d4ff 0%,#3a86ff 100%);
+            color: #fff;
+            padding: 10px 14px;
+            margin: 8px 0 8px auto;
+            border-radius: 16px 16px 2px 16px;
+            max-width: 80%;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,212,255,0.08);
+        }
+        .bot-msg {
+            text-align: left;
+            background: rgba(255,255,255,0.13);
+            color: #f5f7fb;
+            padding: 12px 14px;
+            margin: 8px auto 8px 0;
+            border-radius: 16px 16px 16px 2px;
+            max-width: 90%;
+            font-weight: 400;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .input-area {
+            display: flex;
+            gap: 8px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,0.10);
+            color: #f5f7fb;
+            font-size: 1rem;
+        }
+        .input-area button {
+            padding: 12px 22px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg,#00d4ff 0%,#3a86ff 100%);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .input-area button:hover {
+            background: linear-gradient(90deg,#3a86ff 0%,#00d4ff 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-header">
+        <span class="world">🌍</span>
+        <h1>World Chatbot</h1>
+    </div>
+    <div class="chatbot-container">
+        <div id="chat-box"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){sendMessage()}" autofocus>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+    async function sendMessage() {
+        let inputField = document.getElementById("user-input");
+        let message = inputField.value;
+        if (message.trim() === "") return;
+        let chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML += `<div class='user-msg'>${message}</div>`;
+        let response = await fetch("/get", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: message })
+        });
+        let data = await response.json();
+        let botReply = `
+            <div class='bot-msg'>
+                <b>📘 Explanation:</b><br>${data.reply.explain}<br><br>
+                <b>📝 Summary:</b><br>${data.reply.summary}<br><br>
+                <b>💡 Examples:</b><br>${data.reply.example}
+            </div>
+        `;
+        chatBox.innerHTML += botReply;
+        inputField.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    </script>
+</body>
+</html>
