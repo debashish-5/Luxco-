@@ -20,6 +20,10 @@ def krushi():
 def sale():
     return render_template("sale.html")
 
+@app.route("/machines")
+def machines():
+    return render_template("machines.html")
+
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
