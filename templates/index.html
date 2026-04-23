@@ -3,32 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Discover Odisha</title>
+  <title>Discover Odisha | Krushi AI</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
     :root {
-      --bg: #07111f;
-      --bg-2: #0b1728;
+      --bg: #08140d;
+      --bg-2: #102218;
       --surface: rgba(255,255,255,0.08);
       --surface-2: rgba(255,255,255,0.12);
-      --text: #f5f7fb;
-      --muted: rgba(245,247,251,0.74);
-      --accent: #f7b801;
-      --accent-2: #3a86ff;
+      --text: #f6fbf6;
+      --muted: rgba(246,251,246,0.75);
+      --accent: #8bc34a;
+      --accent-2: #2e7d32;
+      --accent-3: #d4a373;
       --line: rgba(255,255,255,0.10);
       --max: 1200px;
       --radius: 24px;
-      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+      --shadow: 0 20px 50px rgba(0,0,0,0.30);
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(58,134,255,0.18), transparent 30%),
-        radial-gradient(circle at top right, rgba(247,184,1,0.14), transparent 26%),
+        radial-gradient(circle at top left, rgba(139,195,74,0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(212,163,115,0.12), transparent 24%),
         linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
     }
 
@@ -40,7 +44,7 @@
       top: 0;
       z-index: 30;
       backdrop-filter: blur(14px);
-      background: rgba(7,17,31,0.68);
+      background: rgba(8,20,13,0.75);
       border-bottom: 1px solid var(--line);
     }
 
@@ -72,13 +76,29 @@
       flex-wrap: wrap;
       color: var(--muted);
       font-size: 0.95rem;
+      align-items: center;
     }
 
     .nav-links a:hover { color: var(--text); }
 
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: var(--accent); color: #13210a; }
+    .btn.secondary { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.14); }
+
     .hero {
       position: relative;
-      min-height: 90vh;
+      min-height: 92vh;
       display: grid;
       align-items: end;
       overflow: hidden;
@@ -89,8 +109,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(180deg, rgba(5,10,20,0.18) 0%, rgba(5,10,20,0.72) 68%, rgba(7,17,31,1) 100%),
-        url('https://images.unsplash.com/photo-1560277090-6c0f6f5b1e7b?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+        linear-gradient(180deg, rgba(4,10,7,0.16) 0%, rgba(4,10,7,0.72) 68%, rgba(8,20,13,1) 100%),
+        url('https://images.unsplash.com/photo-1626226769718-7f619265d36b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDQ3fHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8MHx8fDA%3D') center/cover no-repeat;
       transform: scale(1.03);
     }
 
@@ -140,21 +160,6 @@
       flex-wrap: wrap;
       margin-top: 28px;
     }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 14px 20px;
-      border-radius: 999px;
-      font-weight: 700;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-      border: 1px solid transparent;
-    }
-
-    .btn:hover { transform: translateY(-2px); }
-    .btn.primary { background: var(--accent); color: #1a1200; }
-    .btn.secondary { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.14); }
 
     .hero-card {
       background: rgba(255,255,255,0.08);
@@ -227,8 +232,8 @@
     .wide-image {
       min-height: 380px;
       background:
-        linear-gradient(180deg, rgba(5,10,20,0.05), rgba(5,10,20,0.55)),
-        url('https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+        linear-gradient(180deg, rgba(4,10,7,0.05), rgba(4,10,7,0.60)),
+        url('data:image/jpeg;base64,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') center/cover no-repeat;
       border-radius: var(--radius);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
@@ -320,7 +325,7 @@
 
     .feature-card {
       position: relative;
-      min-height: 320px;
+      min-height: 340px;
       border-radius: 24px;
       overflow: hidden;
       border: 1px solid var(--line);
@@ -332,7 +337,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(5,10,20,0.08), rgba(5,10,20,0.76));
+      background: linear-gradient(180deg, rgba(4,10,7,0.08), rgba(4,10,7,0.80));
       z-index: 1;
     }
 
@@ -416,19 +421,66 @@
 
       .timeline-item { grid-template-columns: 1fr; gap: 8px; }
       .stats { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .nav-links { gap: 12px; }
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 14px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .mini-card {
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transition: 0.3s ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .mini-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .mini-card h4 {
+      font-size: 15px;
+      margin: 0 0 4px;
+      color: red;
+    }
+
+    .mini-card p {
+      font-size: 12px;
+      margin: 0;
+      color: #555;
     }
   </style>
 </head>
 <body>
   <header class="nav">
     <div class="nav-inner">
-      <div class="brand">Discover <span>Odisha</span></div>
+      <div class="brand">Luxco <span>Y</span> | Foundational Unit</div>
       <nav class="nav-links">
         <a href="#about">About</a>
         <a href="#krushi">Krushi</a>
         <a href="#places">Places</a>
         <a href="#video">Video</a>
         <a href="#projects">Projects</a>
+        <a href="/chatbot" class="btn primary" style="font-size:1rem;padding:10px 18px;">Chatbot</a>
       </nav>
     </div>
   </header>
@@ -437,24 +489,26 @@
     <div class="container hero-content">
       <div class="hero-grid">
         <div>
-          <div class="eyebrow">✨ Land of temples, beaches, heritage & nature</div>
-          <h1><span style="font-size:2.2rem;vertical-align:middle;">🌍</span> Experience the beauty of Odisha.</h1>
+          <div class="eyebrow">Future is here.</div>
+          <h1 style="font-weight:900;letter-spacing:-0.03em;">ସମୃଦ୍ଧ କୃଷି, ସମୃଦ୍ଧ ବିଶ୍ୱ</h1>
           <p class="lead">
-            A modern homepage with strong visuals, clean spacing, and a premium look.
-            It also includes a Krushi section, a crop medicine model page, and a chatbot page idea for your project.
+            A modern website for agriculture, farmer support, and AI-powered guidance.
+            Explore crop knowledge, farming ideas, and chatbot help in one clean platform.
+            <span style="color:var(--accent);font-weight:700;">Built for a premium project look.</span>
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="#krushi">Explore Krushi</a>
-            <a class="btn secondary" href="#projects">View Pages</a>
+            <a class="btn secondary" href="/sale">View Pages</a>
+            <a class="btn primary" href="/chatbot" style="background:var(--accent-2);color:#fff;">Try Chatbot</a>
           </div>
         </div>
 
         <aside class="hero-card">
-          <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80" alt="Odisha scenic view" />
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGluZGlhbiUyMGZhcm1lcnxlbnwwfHwwfHx8MA%3D%3D" alt="Farmer in field" />
           <div class="stats">
-            <div class="stat"><strong>500+</strong><span>Temples</span></div>
-            <div class="stat"><strong>480 km</strong><span>Coastline</span></div>
-            <div class="stat"><strong>Rich</strong><span>Culture</span></div>
+            <div class="stat"><strong>Crop</strong><span>Support</span></div>
+            <div class="stat"><strong>AI</strong><span>Help</span></div>
+            <div class="stat"><strong>Farmer</strong><span>Friendly</span></div>
           </div>
         </aside>
       </div>
@@ -467,17 +521,17 @@
         <div class="grid-2">
           <div class="card">
             <div class="card-body">
-              <h2 class="section-title">About Odisha</h2>
+              <h2 class="section-title">About This Project</h2>
               <p class="section-subtitle" style="margin-bottom:0;">
-                Odisha is known for its ancient architecture, classical dance, vibrant festivals,
-                peaceful beaches, wildlife sanctuaries, and warm hospitality. The state blends history,
-                art, spirituality, and natural beauty in one place.
+                This page is designed for a Krushi and chatbot project. It uses a green, earthy theme
+                inspired by farming, crops, and nature. You can place your crop disease prediction page
+                and chatbot page inside this structure.
               </p>
             </div>
           </div>
 
           <div class="wide-image">
-            <span>Puri, Konark, Bhubaneswar and beyond</span>
+            <span>Farming, crops, guidance, and AI support</span>
           </div>
         </div>
       </div>
@@ -485,32 +539,32 @@
 
     <section class="section" id="krushi">
       <div class="container">
-        <h2 class="section-title">Krushi Section</h2>
+        <h2 class="section-title">Krushi AI Hub</h2>
         <p class="section-subtitle">
-          A clean agricultural section with crop images, farmer imagery, and a button to open your Krushi page.
+          An agriculture section offering medicine monitoring and AI chatbot support for farmers.
         </p>
 
         <div class="feature-grid">
           <article class="feature-card">
-            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80');"></div>
+            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1696861286643-341a8d7a79e9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1lZGljaW5lJTIwZm9yJTIwY3JvcHxlbnwwfHwwfHx8MA%3D%3D');"></div>
             <div class="feature-content">
-              <div class="pill">🌾 Krushi Overview</div>
-              <h3>Healthy crops, smart farming</h3>
-              <p>Showcase fields, crops, and agricultural progress with a premium full-width design.</p>
+              <div class="pill">Luxco Y2</div>
+              <h3>Smart crop monitoring</h3>
+              <p>A smart system for crop disease prediction, medicine recommendation, and AI guidance.</p>
               <div class="feature-links">
-                <a class="btn primary" href="krushi.html">Open Krushi Page</a>
+                <a class="btn primary" href="/predict">Meet Luxco Y2</a>
               </div>
             </div>
           </article>
 
           <article class="feature-card">
-            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1600&q=80');"></div>
+            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1623211269755-569fec0536d2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aW5kaWFuJTIwZmFybWVyfGVufDB8fDB8fHww');"></div>
             <div class="feature-content">
-              <div class="pill">👨‍🌾 Farmers</div>
-              <h3>People behind the field</h3>
-              <p>A strong hero image of farmers gives the page a human and professional feel.</p>
+              <div class="pill">Luxco Y1</div>
+              <h3>Support for farmers</h3>
+              <p>Use a friendly chatbot to explain crop problems, medicine, and farming ideas clearly.</p>
               <div class="feature-links">
-                <a class="btn secondary" href="krushi.html#farmers">See Farmers</a>
+                <a class="btn secondary" href="/chatbot">Meet Luxco Y1</a>
               </div>
             </div>
           </article>
@@ -518,97 +572,125 @@
       </div>
     </section>
 
-    <section class="section" id="places">
-      <div class="container">
-        <h2 class="section-title">Featured Places</h2>
-        <p class="section-subtitle">
-          Use this section to highlight the best destinations in a simple, professional way.
-        </p>
+ <section class="section" id="agri-map">
+  <div class="container">
+    <h2 class="section-title">Luxco Y3: Agriculture Map of Odisha</h2>
+    <p class="section-subtitle">
+      Explore agricultural areas and crops using an interactive map.
+    </p>
 
-        <div class="timeline">
-          <div class="timeline-item">
-            <strong>01</strong>
-            <div>
-              <h4>Puri</h4>
-              <p>Famous for the Jagannath Temple and the long, lively beach coastline.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <strong>02</strong>
-            <div>
-              <h4>Konark</h4>
-              <p>Known worldwide for the Sun Temple and its architectural brilliance.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <strong>03</strong>
-            <div>
-              <h4>Bhubaneswar</h4>
-              <p>The capital city with temples, modern infrastructure, and city energy.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Map Box -->
+    <div id="map" style="height: 500px; border-radius: 15px;"></div>
+  </div>
+</section>
 
     <section class="section" id="video">
       <div class="container">
-        <h2 class="section-title">Full-Width Video Section</h2>
+        <h2 class="section-title">Agricultural Ideas</h2>
         <p class="section-subtitle">
-          Add a YouTube video for the Odisha or Krushi page. This gives the page a more premium and dynamic feel.
+          This section provides clear guidance to make farming more effective and informed.
         </p>
+<div class="video-wrap">
+  <iframe 
+    width="560" 
+    height="315" 
+    src="https://www.youtube.com/embed/P7KwbTqrSQY?autoplay=1&mute=1&loop=1&playlist=P7KwbTqrSQY" 
+    title="Farming and agriculture video" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+  <a href="/reel" class="btn primary">Watch Reels</a>
 
-        <div class="video-wrap">
-          <iframe
-            src="https://www.youtube.com/embed/8q3mO8V0TqA"
-            title="Odisha travel video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
-        </div>
       </div>
     </section>
 
-    <section class="section" id="projects">
-      <div class="container">
-        <h2 class="section-title">Your Two Main Pages</h2>
-        <p class="section-subtitle">
-          Keep the project structured like this: one page for crop medicine prediction, and one page for chatbot.
-        </p>
+ <section class="section" id="projects">
+  <div class="container">
+    <h2 class="section-title">Luxco Features</h2>
+    <p class="section-subtitle">
+      Smart agriculture solutions powered by AI for better farming decisions.
+    </p>
 
-        <div class="cards">
-          <article class="mini-card">
-            <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80" alt="Crop medicine model" />
-            <div class="info">
-              <h4>Crop Medicine Model</h4>
-              <p>Page 1 for your trained model that predicts medicine for crops.</p>
-            </div>
-          </article>
+    <div class="cards">
 
-          <article class="mini-card">
-            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Chatbot page" />
-            <div class="info">
-              <h4>Chatbot Page</h4>
-              <p>Page 2 for your chatbot with a clean conversation interface.</p>
-            </div>
-          </article>
+      <a href="/chatbot" class="card-link">
+        <article class="mini-card">
+          <img src="https://plus.unsplash.com/premium_vector-1726141126840-555424622b89?w=352&dpr=2&h=367&auto=format&fit=crop&q=60&ixlib=rb-4.1.0" alt="AI Chatbot" />
+          <div class="info">
+            <h4>Luxco Y1</h4>
+            <p>AI Chatbot Guidance for farmers</p>
+          </div>
+        </article>
+      </a>
 
-          <article class="mini-card">
-            <img src="https://images.unsplash.com/photo-1492496913980-501348b61469?auto=format&fit=crop&w=1200&q=80" alt="Professional website design" />
-            <div class="info">
-              <h4>Professional UI/UX</h4>
-              <p>Keep the same font, spacing, and colors across all pages for a premium look.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
+      <a href="/predict" class="card-link">
+        <article class="mini-card">
+          <img src="https://images.unsplash.com/photo-1696861286643-341a8d7a79e9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1lZGljaW5lJTIwZm9yJTIwY3JvcHxlbnwwfHwwfHx8MA%3D%3D" alt="Crop Prediction" />
+          <div class="info">
+            <h4>Luxco Y2</h4>
+            <p>Crop Medicine Prediction</p>
+          </div>
+        </article>
+      </a>
+
+
+
+      <a href="/sale" class="card-link">
+        <article class="mini-card">
+          <img src="https://plus.unsplash.com/premium_photo-1686529896385-8a8d581d0225?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2FsZXMlMjB2ZWdhdGFibGV8ZW58MHx8MHx8fDA%3D" alt="Crop Sales" />
+          <div class="info">
+            <h4>Luxco Y4</h4>
+            <p>Crop & Product Sales Platform</p>
+          </div>
+        </article>
+      </a>
+
+      <a href="/reel" class="card-link">
+        <article class="mini-card">
+          <img src="https://images.unsplash.com/photo-1528693404014-b13ebe6e723e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZmFybWVycyUyMGluZGlhbnxlbnwwfHwwfHx8MA%3D%3D" alt="Farmer Guidance" />
+          <div class="info">
+            <h4>Luxco Y5</h4>
+            <p>Farmer Guidance</p>
+          </div>
+        </article>
+      </a>
+
+    </div>
+  </div>
+</section>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <strong>Discover Odisha</strong> — modern, responsive, and project-ready.
+      <div class="brand">Luxco <span>Y</span>: Next-Gen Farming
     </div>
   </footer>
 </body>
+<script>
+  // Create map centered on Odisha
+  var map = L.map('map').setView([20.2961, 85.8245], 7);
+
+  // Map tiles (like Google Map view)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  // Add markers (Agriculture areas)
+
+  // Cuttack (Rice)
+  L.marker([20.4625, 85.8828]).addTo(map)
+    .bindPopup("🌾 Rice Farming - Cuttack");
+
+  // Puri (Vegetables)
+  L.marker([19.8135, 85.8312]).addTo(map)
+    .bindPopup("🥦 Vegetables - Puri");
+
+  // Sambalpur (Pulses)
+  L.marker([21.4669, 83.9812]).addTo(map)
+    .bindPopup("🌱 Pulses - Sambalpur");
+
+</script>
 </html>

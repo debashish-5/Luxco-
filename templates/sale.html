@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krushi Sale</title>
+  <style>
+    :root {
+      --bg: #f5faf5;
+      --card: #ffffff;
+      --green: #2e7d32;
+      --green-2: #43a047;
+      --dark: #16301b;
+      --text: #213026;
+      --muted: #637268;
+      --line: rgba(46, 125, 50, 0.12);
+      --shadow: 0 14px 34px rgba(18, 44, 20, 0.08);
+      --radius: 22px;
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(102,187,106,0.10), transparent 26%),
+        radial-gradient(circle at top right, rgba(46,125,50,0.06), transparent 22%),
+        var(--bg);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255,255,255,0.90);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      font-size: 1.06rem;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      color: var(--dark);
+    }
+
+    .brand span { color: var(--green); }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn.primary:hover {
+      background: var(--green-2);
+      box-shadow: 0 10px 22px rgba(46,125,50,0.18);
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--green);
+      border-color: rgba(46,125,50,0.18);
+    }
+
+    .btn.secondary:hover { background: #f2fbf2; }
+
+    .topbar {
+      padding: 22px 0 8px;
+    }
+
+    .topbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(46,125,50,0.08);
+      color: var(--green);
+      border: 1px solid rgba(46,125,50,0.12);
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4.4vw, 3.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--dark);
+    }
+
+    .sub {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 70ch;
+      font-size: 0.98rem;
+    }
+
+    .searchbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      flex: 1;
+      min-width: 260px;
+      max-width: 640px;
+    }
+
+    .searchbar span {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .searchbar input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 18px 0 24px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 18px rgba(18,44,20,0.05);
+      cursor: pointer;
+    }
+
+    .chip.active,
+    .chip:hover {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding-bottom: 48px;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 42px rgba(18,44,20,0.10);
+    }
+
+    .product-image {
+      position: relative;
+      aspect-ratio: 16/11;
+      overflow: hidden;
+      background: #eaf6ea;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge,
+    .discount {
+      position: absolute;
+      top: 14px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .badge {
+      left: 14px;
+      background: rgba(46,125,50,0.95);
+      color: white;
+    }
+
+    .discount {
+      right: 14px;
+      background: rgba(255,255,255,0.95);
+      color: var(--green);
+      border: 1px solid rgba(46,125,50,0.12);
+    }
+
+    .product-body {
+      padding: 16px;
+    }
+
+    .product-name {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+      color: var(--dark);
+    }
+
+    .meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1fbf1;
+      color: var(--green);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+
+    .price {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--dark);
+    }
+
+    .old-price {
+      color: #8b9b8f;
+      text-decoration: line-through;
+      font-size: 0.95rem;
+    }
+
+    .subtext {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      padding: 28px 0 40px;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid rgba(46,125,50,0.10);
+      background: rgba(255,255,255,0.62);
+    }
+
+    .footer strong { color: var(--dark); }
+
+    @media (max-width: 980px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 0;
+      }
+
+      .topbar-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .searchbar {
+        max-width: 100%;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-actions,
+      .actions {
+        width: 100%;
+      }
+
+      .btn,
+      .nav-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Krushi <span>Sale</span></div>
+      <div class="nav-actions">
+        <a class="btn secondary" href="/">Return Home</a>
+        <a class="btn primary" href="/chatbot">Chatbot</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="topbar">
+      <div class="eyebrow">🌾 Fresh farm products</div>
+      <div class="topbar-row">
+        <div>
+          <h1>Agricultural Market</h1>
+          <p class="sub">Rice, peanut, vegetables, seeds, and farm essentials in a clean green marketplace style.</p>
+        </div>
+        <label class="searchbar" aria-label="Search products">
+          <span>⌕</span>
+          <input type="text" placeholder="Search rice, peanut, vegetables, seeds..." />
+        </label>
+      </div>
+
+      <div class="chips">
+        <button class="chip active">All</button>
+        <button class="chip">Rice</button>
+        <button class="chip">Peanut</button>
+        <button class="chip">Vegetables</button>
+        <button class="chip">Seeds</button>
+        <button class="chip">Fertilizer</button>
+      </div>
+    </section>
+
+    <section class="product-grid" id="products">
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?auto=format&fit=crop&w=1400&q=80" alt="Rice" />
+          <div class="badge">Best Seller</div>
+          <div class="discount">-20%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Premium Rice 5kg</h3>
+          <div class="meta"><span class="rating">4.7 ★</span><span>18,240 users</span><span>Fresh grains</span></div>
+          <div class="price-row"><div class="price">₹399</div><div class="old-price">₹499</div></div>
+          <p class="subtext">Clean, well-packed rice for daily use with trusted farm sourcing.</p>
+          <div class="actions">
+            <a class="btn primary" href="/">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=1400&q=80" alt="Peanut" />
+          <div class="badge">Hot Deal</div>
+          <div class="discount">-15%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Organic Peanut Pack 1kg</h3>
+          <div class="meta"><span class="rating">4.8 ★</span><span>9,870 users</span><span>Protein-rich</span></div>
+          <div class="price-row"><div class="price">₹189</div><div class="old-price">₹219</div></div>
+          <p class="subtext">Healthy peanuts for snacks, cooking, and oil preparation.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?auto=format&fit=crop&w=1400&q=80" alt="Vegetables" />
+          <div class="badge">Fresh Pick</div>
+          <div class="discount">-25%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Vegetable Combo Pack</h3>
+          <div class="meta"><span class="rating">4.6 ★</span><span>12,430 users</span><span>Daily fresh</span></div>
+          <div class="price-row"><div class="price">₹249</div><div class="old-price">₹329</div></div>
+          <p class="subtext">Tomato, potato, onion, brinjal, and green vegetables in one pack.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=1400&q=80" alt="Tomato" />
+          <div class="badge">Season Offer</div>
+          <div class="discount">-18%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Fresh Tomatoes 1kg</h3>
+          <div class="meta"><span class="rating">4.5 ★</span><span>7,210 users</span><span>Farm fresh</span></div>
+          <div class="price-row"><div class="price">₹79</div><div class="old-price">₹95</div></div>
+          <p class="subtext">Bright tomatoes sourced from local farms with quick delivery.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=1400&q=80" alt="Potato" />
+          <div class="badge">Popular</div>
+          <div class="discount">-10%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Potato Sack 5kg</h3>
+          <div class="meta"><span class="rating">4.6 ★</span><span>14,560 users</span><span>Bulk pack</span></div>
+          <div class="price-row"><div class="price">₹169</div><div class="old-price">₹189</div></div>
+          <p class="subtext">Affordable potatoes for home use, hotels, and small food businesses.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=1400&q=80" alt="Seeds" />
+          <div class="badge">New</div>
+          <div class="discount">-22%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Hybrid Vegetable Seeds</h3>
+          <div class="meta"><span class="rating">4.9 ★</span><span>5,880 users</span><span>High germination</span></div>
+          <div class="price-row"><div class="price">₹299</div><div class="old-price">₹385</div></div>
+          <p class="subtext">Trusted seed mix for farmers who want better growth and output.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1513135467888-3f3a4a3b3b86?auto=format&fit=crop&w=1400&q=80" alt="Onion" />
+          <div class="badge">Fresh Stock</div>
+          <div class="discount">-12%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Red Onion 1kg</h3>
+          <div class="meta"><span class="rating">4.4 ★</span><span>10,120 users</span><span>Kitchen essential</span></div>
+          <div class="price-row"><div class="price">₹59</div><div class="old-price">₹67</div></div>
+          <p class="subtext">Fresh red onions for everyday cooking and bulk kitchen use.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=1400&q=80" alt="Carrot" />
+          <div class="badge">Organic</div>
+          <div class="discount">-16%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Carrot Bundle 1kg</h3>
+          <div class="meta"><span class="rating">4.7 ★</span><span>6,540 users</span><span>Nutritious</span></div>
+          <div class="price-row"><div class="price">₹89</div><div class="old-price">₹106</div></div>
+          <p class="subtext">Sweet and fresh carrots with good size and quality.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1510627498534-cf7e9002facc?auto=format&fit=crop&w=1400&q=80" alt="Cabbage" />
+          <div class="badge">Best Value</div>
+          <div class="discount">-14%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Cabbage Fresh Pack</h3>
+          <div class="meta"><span class="rating">4.5 ★</span><span>4,890 users</span><span>Farm sourced</span></div>
+          <div class="price-row"><div class="price">₹39</div><div class="old-price">₹45</div></div>
+          <p class="subtext">Fresh cabbage for curry, salad, and home kitchen use.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1574316071802-0d684efa7bf5?auto=format&fit=crop&w=1400&q=80" alt="Cucumber" />
+          <div class="badge">Daily Use</div>
+          <div class="discount">-11%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Cucumber 1kg</h3>
+          <div class="meta"><span class="rating">4.6 ★</span><span>5,700 users</span><span>Cool fresh</span></div>
+          <div class="price-row"><div class="price">₹49</div><div class="old-price">₹55</div></div>
+          <p class="subtext">Crunchy cucumber ideal for salads, juices, and cooling meals.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=1400&q=80" alt="Green peas" />
+          <div class="badge">Top Pick</div>
+          <div class="discount">-13%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Green Peas 500g</h3>
+          <div class="meta"><span class="rating">4.7 ★</span><span>8,340 users</span><span>Kitchen fresh</span></div>
+          <div class="price-row"><div class="price">₹69</div><div class="old-price">₹79</div></div>
+          <p class="subtext">Soft, sweet green peas for home cooking and frozen storage.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=1400&q=80" alt="Fertilizer" />
+          <div class="badge">Useful</div>
+          <div class="discount">-17%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Organic Fertilizer Pack</h3>
+          <div class="meta"><span class="rating">4.8 ★</span><span>3,780 users</span><span>Crop support</span></div>
+          <div class="price-row"><div class="price">₹349</div><div class="old-price">₹420</div></div>
+          <p class="subtext">Supports healthy plant growth and better soil condition.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&w=1400&q=80" alt="Sprayer" />
+          <div class="badge">Tool</div>
+          <div class="discount">-19%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Hand Sprayer 2L</h3>
+          <div class="meta"><span class="rating">4.5 ★</span><span>2,940 users</span><span>Farm tool</span></div>
+          <div class="price-row"><div class="price">₹279</div><div class="old-price">₹345</div></div>
+          <p class="subtext">Easy-to-use sprayer for garden care and crop protection work.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1582515073490-39981397c445?auto=format&fit=crop&w=1400&q=80" alt="Bottle gourd" />
+          <div class="badge">Fresh</div>
+          <div class="discount">-9%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Bottle Gourd 1kg</h3>
+          <div class="meta"><span class="rating">4.4 ★</span><span>4,210 users</span><span>Seasonal</span></div>
+          <div class="price-row"><div class="price">₹34</div><div class="old-price">₹37</div></div>
+          <p class="subtext">Fresh bottle gourd with natural taste for daily cooking.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-image">
+          <img src="https://images.unsplash.com/photo-1524593119776-3d43ac1d63a3?auto=format&fit=crop&w=1400&q=80" alt="Spinach" />
+          <div class="badge">Healthy</div>
+          <div class="discount">-12%</div>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Spinach Bunch Pack</h3>
+          <div class="meta"><span class="rating">4.7 ★</span><span>6,010 users</span><span>Leafy green</span></div>
+          <div class="price-row"><div class="price">₹29</div><div class="old-price">₹33</div></div>
+          <p class="subtext">Fresh leafy spinach for healthy meals and quick cooking.</p>
+          <div class="actions">
+            <a class="btn primary" href="#">Add to Cart</a>
+            <a class="btn secondary" href="/chatbot">Ask Bot</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <strong>Krushi Sale</strong> — simple, clean, and farmer-friendly.
+    </div>
+  </footer>
+</body>
+</html>

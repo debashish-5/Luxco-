@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reels - Krushi Videos</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: black;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+.reel-container {
+    height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+}
+
+.overlay h3 {
+    margin: 0;
+}
+
+.overlay p {
+    margin: 5px 0 0;
+    font-size: 14px;
+}
+
+.home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: white;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<a href="/" class="home-btn">Home</a>
+
+<!-- Reel 1 -->
+<div class="reel-container">
+    <iframe   src="https://www.youtube.com/embed/P7KwbTqrSQY?autoplay=1&mute=1&loop=1&playlist=P7KwbTqrSQY"></iframe>
+    <div class="overlay">
+        <h3>🌾 Crop Growth</h3>
+        <p>Understanding crop growth stages</p>
+    </div>
+</div>
+
+<!-- Reel 2 -->
+<div class="reel-container">
+    <iframe src="https://www.youtube.com/embed/8q3mO8V0TqA?autoplay=1&mute=1&loop=1"></iframe>
+    <div class="overlay">
+        <h3>🚜 Smart Farming</h3>
+        <p>Modern agriculture techniques</p>
+    </div>
+</div>
+
+<!-- Reel 3 -->
+<div class="reel-container">
+    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=1&mute=1&loop=1"></iframe>
+    <div class="overlay">
+        <h3>👨‍🌾 Farmers Life</h3>
+        <p>Real life farming journey</p>
+    </div>
+</div>
+
+</body>
+</html>

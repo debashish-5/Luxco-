@@ -6,112 +6,196 @@
 <title>Crop Medicine Prediction</title>
 
 <style>
-body{
-    margin:0;
-    font-family: Arial;
-    background:#0b1020;
-    color:white;
-}
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
 
-.container{
-    width:90%;
-    margin:auto;
-    text-align:center;
-}
+    .chat-container {
+        width: 90%;
+        max-width: 700px;
+        margin: 50px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0px 0px 12px rgba(0,0,0,0.12);
+    }
 
-header{
-    padding:20px;
-    background:#111a30;
-    display:flex;
-    justify-content:space-between;
-}
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
 
-h1 span{color:#00d4ff}
+    header h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #222;
+    }
 
-.section{
-    padding:60px 0;
-}
+    header h1 span {
+        color: #28a745;
+    }
 
-input, button{
-    padding:12px;
-    margin:10px;
-    border:none;
-    border-radius:5px;
-}
+    header a {
+        text-decoration: none;
+        color: white;
+        background: #007bff;
+        padding: 10px 16px;
+        border-radius: 8px;
+    }
 
-input{
-    width:250px;
-}
+    .section {
+        padding: 10px 0;
+    }
 
-button{
-    background:#00d4ff;
-    font-weight:bold;
-    cursor:pointer;
-}
+    h2 {
+        margin-top: 0;
+        color: #222;
+    }
 
-button:hover{
-    background:#00aacc;
-}
+    p {
+        color: #555;
+    }
 
-.result{
-    margin-top:20px;
-    background:#111a30;
-    padding:20px;
-    border-radius:10px;
-}
+    .upload-area {
+        margin: 20px 0;
+    }
 
-img{
-    margin-top:20px;
-    max-width:300px;
-}
+    input, button {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
 
+    input[type="file"] {
+        width: 100%;
+        background: #fafafa;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    button {
+        background: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #218838;
+    }
+
+    .preview-box {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    img {
+        max-width: 250px;
+        width: 100%;
+        border-radius: 10px;
+        display: none;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .result {
+        margin-top: 20px;
+        background: #e5e5ea;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+        line-height: 1.5;
+    }
+
+    .medicine-form {
+        margin-top: 25px;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+    }
+    .notice-success {
+        background-color: honeydew;
+
+    }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Crop <span>Prediction</span></h1>
-    <a href="index.html" style="color:white">Home</a>
-</header>
+<div class="chat-container">
+    <header>
+        <h1>Luxco <span>Y2</span></h1>
+        <a href="/">Home</a>
+    </header>
 
-<div class="container">
+    <div class="section">
+        <h2>Upload Crop Image</h2>
+        <p>Select a crop image to predict disease and medicine.</p>
 
-<section class="section">
-    <h2>Upload Crop Image</h2>
-    <p>Select a crop image to predict disease and medicine.</p>
+        <div class="upload-area">
+            <input type="file" id="imageInput" accept="image/*">
+            <button type="button" onclick="predict()">Predict</button>
+        </div>
 
-    <input type="file" id="imageInput">
+        <div class="preview-box">
+            <img id="preview" src="" alt="Preview Image">
+        </div>
+
+        <div class="result" id="resultBox">
+            <h3>Prediction Result</h3>
+            <p id="predictionText"></p>
+        </div>
+
+        <form method="post" class="medicine-form">
+            <input type="text" name="crop" placeholder="Crop name" value="{{ crop or '' }}" required>
+            <input type="text" name="problem" placeholder="Problem or disease" value="{{ problem or '' }}" required>
+            <input type="text" name="weather" placeholder="Weather" value="{{ weather or '' }}">
+            <input type="text" name="soil" placeholder="Soil type" value="{{ soil or '' }}">
+            <input type="text" name="stage" placeholder="Growth stage" value="{{ stage or '' }}">
+            <input type="text" name="severity" placeholder="Severity" value="{{ severity or '' }}">
+            <button type="submit">Predict Medicine</button>
+        </form>
+        
+{% if prediction %}
+  <div class="notice-success">
+    <strong>Prediction:</strong> {{ prediction }}
     <br>
-    <button onclick="predict()">Predict</button>
-
-    <div>
-        <img id="preview" src="" alt="">
+    <strong>Suggestion:</strong> {{suggestion}}
+  </div>
+{% endif %}
     </div>
-
-    <div class="result" id="resultBox" style="display:none;">
-        <h3>Prediction Result</h3>
-        <p id="predictionText"></p>
-    </div>
-</section>
-
 </div>
 
 <script>
-function predict(){
+function predict() {
     let fileInput = document.getElementById("imageInput");
     let file = fileInput.files[0];
 
-    if(!file){
+    if (!file) {
         alert("Please upload an image");
         return;
     }
 
-    // Preview image
     let reader = new FileReader();
-    reader.onload = function(e){
-        document.getElementById("preview").src = e.target.result;
-    }
+    reader.onload = function(e) {
+        let preview = document.getElementById("preview");
+        preview.src = e.target.result;
+        preview.style.display = "block";
+    };
     reader.readAsDataURL(file);
 
     let formData = new FormData();
@@ -128,6 +212,7 @@ function predict(){
     })
     .catch(err => {
         console.log(err);
+        alert("Prediction failed");
     });
 }
 </script>
