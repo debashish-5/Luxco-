@@ -21,7 +21,7 @@
 ## Demo Video
 
 <p align="center">
-  <a href="./static/video_pr.mp4">
+  <a href=".static/video_pr.mp4">
     Watch Project Demo Video
   </a>
 </p>
