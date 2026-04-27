@@ -3,9 +3,15 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel,RunnableLambda
 from duckduckgo_search import DDGS
-from langchain.agents import create_react_agent, AgentExecutor
+from langchain_classic.agents import create_react_agent, AgentExecutor
 from langchain.tools import tool
-from langchain import hub
+# OLD (will throw error in new versions)
+# from langchain import hub
+# import langchainhub as hub
+from langchain_classic import hub 
+# # NEW
+# import langchain_hub as hub
+
 
 
 @tool
@@ -45,7 +51,7 @@ def farming_links(topic:str) -> str:
     Return real-time farming-related URLs for a given query.
     No API key required
     """
-    search_query = f"{topic} farming agriculture"
+    search_query = f"{input} farming agriculture"
     try:
         result = []
         with DDGS() as ddgs:
@@ -67,9 +73,9 @@ def farming_links(topic:str) -> str:
 model = ChatOllama(model="mistral")
 
 # Prompts
-explain_prompt = PromptTemplate.from_template("Explain this {topic}")
-summary_prompt = PromptTemplate.from_template("Summarize this {topic}")
-example_prompt = PromptTemplate.from_template("Give 3 examples of this {topic}")
+explain_prompt = PromptTemplate.from_template("Explain this {input}")
+summary_prompt = PromptTemplate.from_template("Summarize this {input}")
+example_prompt = PromptTemplate.from_template("Give 3 examples of this {input}")
 
 predict_prompt = PromptTemplate.from_template("""
 User input:
@@ -91,7 +97,7 @@ You are an AI Agricultural Expert:
 tool_prompt = PromptTemplate.from_template("""
 You are an AI Agriculture Assistant.
 
-User query: {query}
+User query: {input}
 
 If the user is asking for resources, guides, or help related to farming,
 you MUST use the tool `farming_links`.
@@ -128,9 +134,9 @@ agent_executor = AgentExecutor(
 )
 
 chains = RunnableParallel(
-    explain=explain_chain,
+    explain=agent_executor,
     summary=summary_chain,
     example=example_chain,
-    links=RunnableLambda(lambda x:farming_links.invoke(x["topic"]))
+    links=RunnableLambda(lambda x:farming_links.invoke(x["input"]))
 )
   

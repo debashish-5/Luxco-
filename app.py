@@ -75,7 +75,7 @@ def predict_app():
 @app.route("/get", methods=['POST'])
 def get_bot_response():
     user_input = request.json.get("message")
-    result = chains.invoke({'topic': user_input}, config={"timeout": 10})
+    result = chains.invoke({'input': user_input}, config={"timeout": 10})
     return jsonify({"reply": result})
 
 
