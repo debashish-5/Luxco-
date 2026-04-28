@@ -18,12 +18,10 @@
 ---
 ---
 
-## Demo Video
+## Project Architecture
 
 <p align="center">
-  <a href="[.static/video_pr.mp4](https://github.com/debashish-5/Luxco-/blob/main/static/video_pr.mp4)">
-    Watch Project Demo Video
-  </a>
+  <img src="https://github.com/debashish-5/Luxco-/blob/main/file_00000000140c7207b327f1f1686128df.png" alt="Luxco Project Architecture" width="100%">
 </p>
 
 ---
